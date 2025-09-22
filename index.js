@@ -1,59 +1,40 @@
-const express = require("express");
-const wppconnect = require("@wppconnect-team/wppconnect");
-const puppeteer = require("puppeteer-extra");
-const StealthPlugin = require("puppeteer-extra-plugin-stealth");
-
-puppeteer.use(StealthPlugin());
-
+const wppconnect = require('@wppconnect-team/wppconnect');
+const puppeteer = require('puppeteer'); // untuk ambil executablePath
+const express = require('express');
 const app = express();
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;
 
-// Inisialisasi WPPConnect
-wppconnect.create({
-  session: "whatsapp-session",
-  puppeteerOptions: {
-    headless: true,
-    executablePath: process.env.CHROMIUM_PATH || "/usr/bin/chromium-browser",
-    args: [
-      "--no-sandbox",
-      "--disable-setuid-sandbox",
-      "--disable-dev-shm-usage",
-      "--disable-accelerated-2d-canvas",
-      "--no-first-run",
-      "--no-zygote",
-      "--single-process",
-      "--disable-gpu"
-    ]
-  }
-})
-.then((client) => {
-  console.log("✅ WPPConnect berhasil dijalankan");
-  startBot(client);
-})
-.catch((err) => {
-  console.error("❌ Error launching WPPConnect:", err);
+app.get('/', (req, res) => {
+  res.send('🚀 Chatbot WPPConnect GPT berjalan dengan baik!');
 });
 
-// Fungsi chatbot
-function startBot(client) {
-  client.onMessage((message) => {
-    console.log("📩 Pesan diterima:", message.body);
+(async () => {
+  // Ambil path Chrome dari Puppeteer
+  const browserFetcher = puppeteer.createBrowserFetcher();
+  const revisionInfo = await browserFetcher.download(puppeteer._preferredRevision);
+  const chromePath = revisionInfo.executablePath;
 
-    if (message.body.toLowerCase() === "ping") {
-      client.sendText(message.from, "pong 🏓");
+  console.log('✅ Chrome path terdeteksi:', chromePath);
+
+  wppconnect.create({
+    session: 'whatsapp-session',
+    puppeteerOptions: {
+      executablePath: chromePath,
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
     }
+  })
+  .then((client) => start(client))
+  .catch((error) => console.error('❌ Error launching WPPConnect:', error));
+})();
 
-    if (message.body.toLowerCase() === "halo") {
-      client.sendText(message.from, "Hai, ada yang bisa saya bantu? 🤖");
+function start(client) {
+  client.onMessage((message) => {
+    if (message.body.toLowerCase() === 'hi') {
+      client.sendText(message.from, '👋 Halo! Bot WPPConnect GPT siap membantu.');
     }
   });
 }
 
-// Endpoint Express (untuk Render Health Check)
-app.get("/", (req, res) => {
-  res.send("🚀 Chatbot WPPConnect GPT berjalan dengan baik!");
-});
-
-app.listen(port, () => {
-  console.log(`🌍 Server berjalan di port ${port}`);
+app.listen(PORT, () => {
+  console.log(`🌍 Server berjalan di port ${PORT}`);
 });
