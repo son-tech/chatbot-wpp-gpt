@@ -1,31 +1,29 @@
-const wppconnect = require('@wppconnect-team/wppconnect');
-const express = require('express');
+const express = require("express");
+const wppconnect = require("@wppconnect-team/wppconnect");
+
 const app = express();
 const PORT = process.env.PORT || 10000;
-
-app.get('/', (req, res) => {
-  res.send('🚀 Chatbot WPPConnect GPT berjalan dengan baik!');
-});
-
-const chromePath = '/opt/render/.cache/puppeteer/chrome/linux-127.0.6533.88/chrome-linux64/chrome';
 
 wppconnect.create({
   session: 'whatsapp-session',
   puppeteerOptions: {
-    executablePath: chromePath,
+    headless: true,
     args: ['--no-sandbox', '--disable-setuid-sandbox']
   }
-})
-.then((client) => start(client))
-.catch((error) => console.error('❌ Error launching WPPConnect:', error));
-
-function start(client) {
-  client.onMessage((message) => {
-    if (message.body.toLowerCase() === 'hi') {
-      client.sendText(message.from, '👋 Halo! Bot WPPConnect GPT siap membantu.');
+}).then((client) => {
+  console.log("✅ WhatsApp Client ready!");
+  client.onMessage(async (message) => {
+    if (message.body === "ping") {
+      await client.sendText(message.from, "pong");
     }
   });
-}
+}).catch((err) => {
+  console.error("❌ Error launching WPPConnect:", err);
+});
+
+app.get("/", (req, res) => {
+  res.send("🚀 Chatbot WPPConnect GPT berjalan dengan baik!");
+});
 
 app.listen(PORT, () => {
   console.log(`🌍 Server berjalan di port ${PORT}`);
