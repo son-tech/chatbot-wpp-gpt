@@ -13,7 +13,7 @@ wppconnect.create({
 }).then((client) => {
   console.log("✅ WhatsApp Client ready!");
   client.onMessage(async (message) => {
-    if (message.body === "ping") {
+    if (message.body.toLowerCase() === "ping") {
       await client.sendText(message.from, "pong");
     }
   });
