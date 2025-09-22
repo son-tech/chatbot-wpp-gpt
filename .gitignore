@@ -20,3 +20,7 @@ build/
 # OS generated files
 .DS_Store
 Thumbs.db
+
+# WhatsApp session tokens
+tokens/*
+!tokens/.gitkeep
