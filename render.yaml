@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: chatbot-wpp-gpt
+    env: node
+    plan: free
+    buildCommand: "npm install"
+    startCommand: "npm start"
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CHROMIUM_PATH
+        value: /usr/bin/chromium-browser
