@@ -7,19 +7,13 @@ const PORT = process.env.PORT || 10000;
 
 (async () => {
   try {
-    // Cari lokasi Chrome yang dipasang oleh puppeteer
+    // Ambil path Chrome yang sudah diinstall Puppeteer
     const executablePath = puppeteer.executablePath();
 
-    const browser = await puppeteer.launch({
-      executablePath,
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
-      headless: true,
-    });
-
     await wppconnect.create({
-      browserWSEndpoint: browser.wsEndpoint(),
+      session: "whatsapp-session",
       puppeteerOptions: {
-        executablePath,
+        executablePath, // Paksa pakai Chrome Puppeteer
         headless: true,
         args: ["--no-sandbox", "--disable-setuid-sandbox"],
       },
@@ -32,7 +26,7 @@ const PORT = process.env.PORT || 10000;
 })();
 
 app.get("/", (req, res) => {
-  res.send("Chatbot WhatsApp GPT jalan di Render 🚀");
+  res.send("🚀 Chatbot WhatsApp GPT jalan di Render");
 });
 
 app.listen(PORT, () => {
