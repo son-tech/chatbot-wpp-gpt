@@ -1,5 +1,6 @@
 const express = require("express");
 const wppconnect = require("@wppconnect-team/wppconnect");
+const puppeteer = require("puppeteer");
 
 const app = express();
 const PORT = process.env.PORT || 10000;
@@ -8,6 +9,7 @@ wppconnect.create({
   session: 'whatsapp-session',
   puppeteerOptions: {
     headless: true,
+    executablePath: puppeteer.executablePath(), // ✅ ambil Chrome dari Puppeteer
     args: ['--no-sandbox', '--disable-setuid-sandbox']
   }
 }).then((client) => {
