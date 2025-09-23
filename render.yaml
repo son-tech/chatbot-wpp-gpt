@@ -2,9 +2,9 @@ services:
   - type: web
     name: chatbot-wpp-gpt
     env: node
+    plan: free
     buildCommand: "npm install"
     startCommand: "npm start"
-    plan: free
     envVars:
       - key: NODE_VERSION
         value: 18
