@@ -7,16 +7,22 @@ const PORT = process.env.PORT || 10000;
 
 (async () => {
   try {
-    // Launch Puppeteer dengan Chrome yang sudah di-install
+    // Cari lokasi Chrome yang dipasang oleh puppeteer
+    const executablePath = puppeteer.executablePath();
+
     const browser = await puppeteer.launch({
+      executablePath,
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
-      headless: true
+      headless: true,
     });
 
-    // Jalankan WPPConnect
     await wppconnect.create({
       browserWSEndpoint: browser.wsEndpoint(),
-      puppeteerOptions: { headless: true }
+      puppeteerOptions: {
+        executablePath,
+        headless: true,
+        args: ["--no-sandbox", "--disable-setuid-sandbox"],
+      },
     });
 
     console.log("✅ WPPConnect berhasil dijalankan!");
