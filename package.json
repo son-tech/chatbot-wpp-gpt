@@ -1,20 +1,25 @@
 {
   "name": "chatbot-wpp-gpt",
   "version": "1.0.0",
-  "description": "Chatbot WhatsApp berbasis WPPConnect + Puppeteer + Render",
+  "description": "Chatbot WhatsApp dengan WPPConnect + Puppeteer + Render",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "postinstall": "npx puppeteer browsers install chrome"
   },
+  "keywords": [
+    "whatsapp",
+    "chatbot",
+    "wppconnect",
+    "puppeteer",
+    "render"
+  ],
+  "author": "son-tech",
+  "license": "MIT",
   "dependencies": {
-    "@wppconnect-team/wppconnect": "^9.5.0",
-    "puppeteer": "^22.6.5",
-    "express": "^4.18.2"
-  },
-  "devDependencies": {
-    "nodemon": "^3.0.3"
+    "@wppconnect-team/wppconnect": "^1.37.5",
+    "express": "^4.18.2",
+    "puppeteer": "^22.10.0"
   },
   "engines": {
     "node": ">=18.x"
