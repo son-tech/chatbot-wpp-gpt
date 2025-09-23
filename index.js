@@ -5,11 +5,13 @@ const puppeteer = require("puppeteer");
 const app = express();
 const PORT = process.env.PORT || 10000;
 
+const chromePath = process.env.PUPPETEER_EXECUTABLE_PATH || puppeteer.executablePath();
+
 wppconnect.create({
   session: 'whatsapp-session',
   puppeteerOptions: {
     headless: true,
-    executablePath: puppeteer.executablePath(), // ✅ ambil Chrome dari Puppeteer
+    executablePath: chromePath, // ✅ pakai path environment
     args: ['--no-sandbox', '--disable-setuid-sandbox']
   }
 }).then((client) => {
